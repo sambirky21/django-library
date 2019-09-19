@@ -2,39 +2,30 @@ import sqlite3
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.urls import reverse
-from libraryapp.models import Book
-from libraryapp.models import model_factory
+from libraryapp.models import Library
+# from libraryapp.models import model_factory
 from ..connection import Connection
 from django.contrib.auth.decorators import login_required
 
 @login_required
-def book_list(request):
+def list_libraries(request):
     if request.method == 'GET':
         with sqlite3.connect(Connection.db_path) as conn:
-
-            conn.row_factory = model_factory(Book)
-
+            conn.row_factory = sqlite3.Row
             db_cursor = conn.cursor()
+
             db_cursor.execute("""
             select
-                b.id,
-                b.title,
-                b.isbn,
-                b.author,
-                b.year_published,
-                b.librarian_id,
-                b.location_id
-            from libraryapp_book b
+                l.id,
+                l.title,
+                l.address
+            from libraryapp_library l
             """)
 
-            all_books = db_cursor.fetchall()
+            all_libraries = db_cursor.fetchall()
 
-        template = 'books/list.html'
-        context = {
-            'all_books': all_books
-        }
-
-        return render(request, template, context)
+        template_name = 'libraries/list.html'
+        return render(request, template_name, {'all_libraries': all_libraries})
 
     elif request.method == 'POST':
         form_data = request.POST
