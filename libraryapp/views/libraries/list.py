@@ -34,15 +34,12 @@ def list_libraries(request):
             db_cursor = conn.cursor()
 
             db_cursor.execute("""
-            INSERT INTO libraryapp_book
+            INSERT INTO libraryapp_library
             (
-                title, author, isbn,
-                year_published, location_id, librarian_id
+                title, address
             )
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (?, ?)
             """,
-            (form_data['title'], form_data['author'],
-                form_data['isbn'], form_data['year_published'],
-                request.user.librarian.id, form_data["location"]))
+            (form_data['title'], form_data['address']))
 
-            return redirect(reverse('libraryapp:books'))
+            return redirect(reverse('libraryapp:libraries'))
