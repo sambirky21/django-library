@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^book/form$', book_form, name='book_form'),
     url(r'^logout/$', logout_user, name='logout'),
     path('books/<int:book_id>/', book_details, name='book'),
+    url(r'^books/(?P<book_id>[0-9]+)/form$', book_edit_form, name='book_edit_form'),
     path('libraries/<int:library_id>/', library_details, name='library'),
 ]
 
